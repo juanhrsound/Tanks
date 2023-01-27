@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Unity.Audio;
+using UnityEngine.Audio;
 
 namespace Complete
 {
@@ -13,8 +13,22 @@ namespace Complete
         public AudioSource m_ShootingAudio;         // Reference to the audio source used to play the shooting audio. NB: different to the movement audio source.
         public AudioClip m_ChargingClip;            // Audio that plays when each shot is charging up.
 
-        //JJ ---- added this array
-        public AudioClip[] m_FireClip;                // Audio that plays when each shot is fired.
+        //JH ---- 
+        public AudioMixer audioMixer;
+        public AudioClip[] m_FireClip;
+
+        private float volumeMin = 0.4f;
+        private float volumeMax = 0.5f;
+        private float pitchMin = 0.9f;
+        private float pitchMax = 1f;
+        private float lowPassMin = 1589f;
+        private float lowPassMax = 2140f;
+        private float decayTimeMin = 15.77f;
+        private float decayTimeMax = 16.77f;                          
+        private string lowPassShooting = "lowPassShooting";
+        private string decayTime = "decayTime";
+        //JH ----
+
 
         public float m_MinLaunchForce = 15f;        // The force given to the shell if the fire button is not held.
         public float m_MaxLaunchForce = 30f;        // The force given to the shell if the fire button is held for the max charge time.
@@ -100,7 +114,14 @@ namespace Complete
             // Change the clip to the firing clip and play it.
             //m_ShootingAudio.clip = m_FireClip;
 
-            m_ShootingAudio.PlayOneShot(m_FireClip[Random.Range(0, m_FireClip.Length)]);
+            //JJ --- 
+            m_ShootingAudio.PlayOneShot(m_FireClip[Random.Range(0, m_FireClip.Length)], 2f);
+            m_ShootingAudio.volume = Random.Range(volumeMin, volumeMax);
+            m_ShootingAudio.pitch = Random.Range(pitchMin, pitchMax);
+
+            audioMixer.SetFloat(lowPassShooting, Random.Range(lowPassMin, lowPassMax));
+            audioMixer.SetFloat(decayTime, Random.Range(decayTimeMin, decayTimeMax));
+
 
             // Reset the launch force.  This is a precaution in case of missing button events.
             m_CurrentLaunchForce = m_MinLaunchForce;

@@ -1,4 +1,7 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.Audio;
 
 namespace Complete
 {
@@ -6,12 +9,19 @@ namespace Complete
     {
         public LayerMask m_TankMask;                        // Used to filter what the explosion affects, this should be set to "Players".
         public ParticleSystem m_ExplosionParticles;         // Reference to the particles that will play on explosion.
-        public AudioSource m_ExplosionAudio;                // Reference to the audio that will play on explosion.
+       
         public float m_MaxDamage = 100f;                    // The amount of damage done if the explosion is centred on a tank.
         public float m_ExplosionForce = 1000f;              // The amount of force added to a tank at the centre of the explosion.
         public float m_MaxLifeTime = 2f;                    // The time in seconds before the shell is removed.
         public float m_ExplosionRadius = 5f;                // The maximum distance away from the explosion tanks can be and are still affected.
 
+
+        //JH---------
+        public AudioSource m_ExplosionAudio;                // Reference to the audio that will play on explosion.
+        public AudioClip[] m_ExplosionClip;
+
+
+        
 
         private void Start ()
         {
@@ -55,19 +65,60 @@ namespace Complete
             // Unparent the particles from the shell.
             m_ExplosionParticles.transform.parent = null;
 
-            // Play the particle system.
-            m_ExplosionParticles.Play();
+            //JH---------
+           // Invoke("ExplosionDebris", Random.Range(0, 0.3f));
 
-            // Play the explosion sound effect.
-            m_ExplosionAudio.Play();
+            ExplosionDebris();
 
-            // Once the particles have finished, destroy the gameobject they are on.
-            ParticleSystem.MainModule mainModule = m_ExplosionParticles.main;
-            Destroy (m_ExplosionParticles.gameObject, mainModule.duration);
 
-            // Destroy the shell.
-            Destroy (gameObject);
+
         }
+
+
+        //JH---------
+        private void ExplosionDebris()
+        {
+            //m_ExplosionParticles.Play();                      
+
+            Invoke("DebrisOnly_0", Random.Range(0, 1));
+            Invoke("DebrisOnly_1", Random.Range(0, 1));
+            Invoke("DebrisOnly_2", Random.Range(0, 1));
+            Invoke("DebrisOnly_3", Random.Range(0, 1));
+            Invoke("DestroyingShell", 7f);
+
+            //m_ExplosionAudio.Play();       
+                      
+
+        }
+
+        //JH---------
+
+        private void DebrisOnly_0()
+        {
+            m_ExplosionAudio.PlayOneShot(m_ExplosionClip[0], Random.Range(0.9f, 1f));
+        }
+        private void DebrisOnly_1()
+        {
+            m_ExplosionAudio.PlayOneShot(m_ExplosionClip[1], Random.Range(0.9f, 1f));
+        }
+        private void DebrisOnly_2()
+        {
+            m_ExplosionAudio.PlayOneShot(m_ExplosionClip[2], Random.Range(0.2f, 0.3f));
+        }
+        private void DebrisOnly_3()
+        {
+            m_ExplosionAudio.PlayOneShot(m_ExplosionClip[3], Random.Range(0.9f, 1f));
+        }
+
+
+        void DestroyingShell()
+        {
+            ParticleSystem.MainModule mainModule = m_ExplosionParticles.main;
+            Destroy(m_ExplosionParticles.gameObject, mainModule.duration);
+            Destroy(gameObject);
+        }
+        //---------------
+
 
 
         private float CalculateDamage (Vector3 targetPosition)
@@ -89,5 +140,6 @@ namespace Complete
 
             return damage;
         }
+
     }
 }

@@ -76,22 +76,21 @@ namespace Complete
 
 
         //JH---------
+        //Invokes the method "DebrisOnly_0 - DebrisOnly_3" after a random time between 0 and 1 seconds
+
+
         private void ExplosionDebris()
         {
-            //m_ExplosionParticles.Play();                      
-
             Invoke("DebrisOnly_0", Random.Range(0, 1));
             Invoke("DebrisOnly_1", Random.Range(0, 1));
             Invoke("DebrisOnly_2", Random.Range(0, 1));
             Invoke("DebrisOnly_3", Random.Range(0, 1));
-            Invoke("DestroyingShell", 7f);
-
-            //m_ExplosionAudio.Play();       
-                      
+        // Invokes the method "DestroyingShell" after 7 seconds
+            Invoke("DestroyingShell", 7f);                   
 
         }
 
-        //JH---------
+       
 
         private void DebrisOnly_0()
         {

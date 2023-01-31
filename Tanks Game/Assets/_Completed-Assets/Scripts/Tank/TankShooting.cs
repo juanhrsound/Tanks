@@ -114,13 +114,15 @@ namespace Complete
             // Change the clip to the firing clip and play it.
             //m_ShootingAudio.clip = m_FireClip;
 
-            //JJ --- 
+            //JH --- 
             m_ShootingAudio.PlayOneShot(m_FireClip[Random.Range(0, m_FireClip.Length)], 2f);
             m_ShootingAudio.volume = Random.Range(volumeMin, volumeMax);
             m_ShootingAudio.pitch = Random.Range(pitchMin, pitchMax);
 
             audioMixer.SetFloat(lowPassShooting, Random.Range(lowPassMin, lowPassMax));
             audioMixer.SetFloat(decayTime, Random.Range(decayTimeMin, decayTimeMax));
+            //JH ---
+
 
 
             // Reset the launch force.  This is a precaution in case of missing button events.

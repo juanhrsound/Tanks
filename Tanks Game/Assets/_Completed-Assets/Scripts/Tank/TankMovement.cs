@@ -10,6 +10,14 @@ namespace Complete
         public AudioSource m_MovementAudio;         // Reference to the audio source used to play engine sounds. NB: different to the shooting audio source.
         public AudioClip m_EngineIdling;            // Audio to play when the tank isn't moving.
         public AudioClip m_EngineDriving;           // Audio to play when the tank is moving.
+
+        //JH////
+        public AudioClip m_Ground;
+        public AudioClip m_Concrete;
+
+
+
+
 		public float m_PitchRange = 0.2f;           // The amount by which the pitch of the engine noises can vary.
 
         private string m_MovementAxisName;          // The name of the input axis for moving forward and back.

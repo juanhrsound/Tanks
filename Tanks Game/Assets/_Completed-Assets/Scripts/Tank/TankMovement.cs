@@ -7,18 +7,23 @@ namespace Complete
         public int m_PlayerNumber = 1;              // Used to identify which tank belongs to which player.  This is set by this tank's manager.
         public float m_Speed = 12f;                 // How fast the tank moves forward and back.
         public float m_TurnSpeed = 180f;            // How fast the tank turns in degrees per second.
+
+
         public AudioSource m_MovementAudio;         // Reference to the audio source used to play engine sounds. NB: different to the shooting audio source.
+        
         public AudioClip m_EngineIdling;            // Audio to play when the tank isn't moving.
         public AudioClip m_EngineDriving;           // Audio to play when the tank is moving.
 
         //JH////
-        public AudioClip m_Ground;
         public AudioClip m_Concrete;
+        public AudioClip m_Debris;
+        public AudioClip m_Ground;
 
 
 
 
-		public float m_PitchRange = 0.2f;           // The amount by which the pitch of the engine noises can vary.
+
+        public float m_PitchRange = 0.2f;           // The amount by which the pitch of the engine noises can vary.
 
         private string m_MovementAxisName;          // The name of the input axis for moving forward and back.
         private string m_TurnAxisName;              // The name of the input axis for turning.
@@ -30,7 +35,7 @@ namespace Complete
 
         private void Awake ()
         {
-            m_Rigidbody = GetComponent<Rigidbody> ();
+            m_Rigidbody = GetComponent<Rigidbody>();
         }
 
 
@@ -100,6 +105,9 @@ namespace Complete
                     m_MovementAudio.clip = m_EngineIdling;
                     m_MovementAudio.pitch = Random.Range (m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
                     m_MovementAudio.Play ();
+
+
+
                 }
             }
             else
@@ -111,6 +119,9 @@ namespace Complete
                     m_MovementAudio.clip = m_EngineDriving;
                     m_MovementAudio.pitch = Random.Range(m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
                     m_MovementAudio.Play();
+                    
+
+
                 }
             }
         }
@@ -128,10 +139,19 @@ namespace Complete
         {
             // Create a vector in the direction the tank is facing with a magnitude based on the input, speed and the time between frames.
             Vector3 movement = transform.forward * m_MovementInputValue * m_Speed * Time.deltaTime;
+            
+
 
             // Apply this movement to the rigidbody's position.
             m_Rigidbody.MovePosition(m_Rigidbody.position + movement);
+
+            
         }
+
+
+
+
+
 
 
         private void Turn ()

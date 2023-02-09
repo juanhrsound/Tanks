@@ -11,13 +11,18 @@ namespace Complete
 
         public AudioSource m_MovementAudio;         // Reference to the audio source used to play engine sounds. NB: different to the shooting audio source.
         
+
+
         public AudioClip m_EngineIdling;            // Audio to play when the tank isn't moving.
         public AudioClip m_EngineDriving;           // Audio to play when the tank is moving.
 
+        
         //JH////
-        public AudioClip m_Concrete;
-        public AudioClip m_Debris;
+
+        public AudioClip m_Ruins;
         public AudioClip m_Ground;
+        public AudioClip m_Helipad;
+        public AudioClip m_Concrete;
 
 
 
@@ -83,6 +88,7 @@ namespace Complete
         }
 
 
+
         private void Update ()
         {
             // Store the value of both input axes.
@@ -91,6 +97,72 @@ namespace Complete
 
             EngineAudio ();
         }
+
+
+        //JH----
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.tag == "Concrete")
+            {
+                m_MovementAudio.PlayOneShot(m_Concrete);
+
+            }
+
+            if (other.tag == "Ruins")
+            {
+                m_MovementAudio.PlayOneShot(m_Ruins);
+
+            }
+
+            if (other.tag == "Helipad")
+            {
+                m_MovementAudio.PlayOneShot(m_Helipad);
+
+            }         
+
+
+
+
+
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (m_MovementAudio.isPlaying)
+            {
+                m_MovementAudio.Stop();
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //JH----
+
+
 
 
         private void EngineAudio ()

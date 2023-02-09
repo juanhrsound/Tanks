@@ -5,17 +5,25 @@ using UnityEngine.Audio;
 
 public class Concrete : MonoBehaviour
 {
+    public AudioSource concrete;
 
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "player")
+        if(other.tag == "Player")
         {
-            FindObjectOfType<TankMovement>().m_MovementAudio.Play();
+            concrete.Play();
 
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (concrete.isPlaying)
+        {
+            concrete.Stop();
+        }
+    }
 
 
 

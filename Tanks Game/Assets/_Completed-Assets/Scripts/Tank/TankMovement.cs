@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Audio;
 
 namespace Complete
@@ -21,7 +23,7 @@ namespace Complete
         private float m_MovementInputValue;         // The current value of the movement input.
         private float m_TurnInputValue;             // The current value of the turn input.
         private float m_OriginalPitch;
-
+        private string PitchParamOfGround = "PitchParamOfGround";
 
 
         //JH////
@@ -36,7 +38,7 @@ namespace Complete
         public AudioClip m_Helipad;
         public AudioClip m_Concrete;
 
-        private bool isNotOnSand;
+        private bool isNotOnDirt;
 
         
         private void Awake()
@@ -82,9 +84,13 @@ namespace Complete
 
             EngineAudio();
             GroundSound();
+            GroundSoundGrowing();
+
+
+
         }
 
-
+        
         private void EngineAudio()
         {
             // If there is no input (the tank is stationary)...
@@ -97,6 +103,7 @@ namespace Complete
                     m_MovementAudio.clip = m_EngineIdling;
                     m_MovementAudio.pitch = Random.Range(m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
                     m_MovementAudio.Play();
+                    
                 }
             }
             else
@@ -108,9 +115,11 @@ namespace Complete
                     m_MovementAudio.clip = m_EngineDriving;
                     m_MovementAudio.pitch = Random.Range(m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
                     m_MovementAudio.Play();
+                    
                 }
             }
         }
+
 
 
         private void FixedUpdate()
@@ -143,30 +152,31 @@ namespace Complete
             m_Rigidbody.MoveRotation(m_Rigidbody.rotation * turnRotation);
         }
 
+
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.tag == "Ruins")
             {
                 m_GroundAudio.PlayOneShot(m_Ruins);
-                isNotOnSand = true;
+                isNotOnDirt = true;
 
 
             }
-            if (other.tag == "Helipad")
+            else if (other.tag == "Helipad")
             {
                 m_GroundAudio.PlayOneShot(m_Helipad);
-                isNotOnSand = true;
+                isNotOnDirt = true;
 
             }
-            if (other.tag == "Concrete")
+            else if (other.tag == "Concrete")
             {
 
                 m_GroundAudio.PlayOneShot(m_Concrete);
-                isNotOnSand = true;
-
-
+                isNotOnDirt = true;
 
             }
+            
         }
 
         private void OnTriggerExit(Collider other)
@@ -178,10 +188,53 @@ namespace Complete
             }
         }
 
+
         
+        private void GroundSoundGrowing()
+        {
+ 
+            if (!m_GroundAudio.isPlaying)
+            {
+                if (Mathf.Abs(m_MovementInputValue) > 0.1f)
+
+                {
+                    m_GroundAudio.pitch = Random.Range(0 , 1);
+                    m_GroundAudio.time = Random.Range(0, m_GroundAudio.clip.length);
+                    m_GroundAudio.Play();
+
+                }
+                /*
+                if (Mathf.Abs(m_MovementInputValue) < 0.3f)
+                {
+                    m_GroundAudio.pitch = 1.2f;
+                    //audioMainMixer.SetFloat(PitchParamOfGround, 1f);
+
+                    m_GroundAudio.time = Random.Range(0, m_GroundAudio.clip.length);
+                    //Debug.Log(m_MovementInputValue);
+                }*/
+
+
+            }
+
+            if (m_GroundAudio.isPlaying)
+            {
+                if (Mathf.Abs(m_MovementInputValue) < 0.2f)
+
+                {
+                    m_GroundAudio.Stop();
+                    Debug.Log("TERMINAR" + "m_MovementInputValue ");
+
+                }
+            }
+            
+        }
+
+       
         private void GroundSound()
         {
-            if (isNotOnSand == true)
+
+            //concrete and other materials
+            if (isNotOnDirt == true)
             {
                 if (Mathf.Abs(m_TurnInputValue) > 0.1f)
                 {
@@ -201,12 +254,15 @@ namespace Complete
 
 
             }
-
+            
         }
+
         
 
 
     }
+
+    
 
 
     

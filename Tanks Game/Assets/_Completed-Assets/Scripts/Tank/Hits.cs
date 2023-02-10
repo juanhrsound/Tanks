@@ -33,7 +33,7 @@ public class Hits : MonoBehaviour
         {
             hits.PlayOneShot(m_Pumpjack[Random.Range(0, m_Pumpjack.Length)]);
         }
-        if (other.tag == "PalmTrees")
+        if (other.tag == "PalmTree")
         {
             hits.PlayOneShot(m_PalmTrees[Random.Range(0, m_PalmTrees.Length)]);
         }

@@ -25,7 +25,9 @@ namespace Complete
 
 
         //JH////
-        //public AudioMixer audioMixer;
+
+        public AudioMixer audioMainMixer;
+        private string PitchParam = "PitchParam";
 
         public AudioSource m_GroundAudio;
         public AudioClip m_Ground;
@@ -33,17 +35,10 @@ namespace Complete
         public AudioClip m_Ruins;        
         public AudioClip m_Helipad;
         public AudioClip m_Concrete;
-        private string PitchParam;
 
-        private bool isOnRuins;
-        private bool isOnHelipad;
-        private bool isOnConcrete;
+        private bool isNotOnSand;
 
-
-
-
-
-
+        
         private void Awake()
         {
             m_Rigidbody = GetComponent<Rigidbody>();
@@ -85,33 +80,8 @@ namespace Complete
             m_MovementInputValue = Input.GetAxis(m_MovementAxisName);
             m_TurnInputValue = Input.GetAxis(m_TurnAxisName);
 
-            
-
             EngineAudio();
-            //GroundSound();
-        }
-
-        private void GroundSound()
-        {/*
-            if (isOnConcrete == true)
-            {
-                if (Mathf.Abs(m_TurnInputValue) > 0.1f)
-                {
-                    audioMixer.SetFloat(PitchParam, 2f);
-
-                    if (m_GroundAudio.isPlaying)
-                    {
-                        m_GroundAudio.Play();
-                    }
-
-                    Debug.Log(m_TurnInputValue);
-
-
-                }
-                
-            }
-
-            */
+            GroundSound();
         }
 
 
@@ -134,43 +104,67 @@ namespace Complete
                 // Otherwise if the tank is moving and if the idling clip is currently playing...
                 if (m_MovementAudio.clip == m_EngineIdling)
                 {
-                    // ... change the clip to driving and play. //JH YA LO ENCONTRE
-
+                    // ... change the clip to driving and play.
                     m_MovementAudio.clip = m_EngineDriving;
                     m_MovementAudio.pitch = Random.Range(m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
                     m_MovementAudio.Play();
-
-
-
-
                 }
-
-
             }
+        }
+
+
+        private void FixedUpdate()
+        {
+            // Adjust the rigidbodies position and orientation in FixedUpdate.
+            Move();
+            Turn();
+        }
+
+
+        private void Move()
+        {
+            // Create a vector in the direction the tank is facing with a magnitude based on the input, speed and the time between frames.
+            Vector3 movement = transform.forward * m_MovementInputValue * m_Speed * Time.deltaTime;
+
+            // Apply this movement to the rigidbody's position.
+            m_Rigidbody.MovePosition(m_Rigidbody.position + movement);
+        }
+
+
+        private void Turn()
+        {
+            // Determine the number of degrees to be turned based on the input, speed and time between frames.
+            float turn = m_TurnInputValue * m_TurnSpeed * Time.deltaTime;
+
+            // Make this into a rotation in the y axis.
+            Quaternion turnRotation = Quaternion.Euler(0f, turn, 0f);
+
+            // Apply this rotation to the rigidbody's rotation.
+            m_Rigidbody.MoveRotation(m_Rigidbody.rotation * turnRotation);
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.tag == "Ruins")
+            if (other.tag == "Ruins")
             {
                 m_GroundAudio.PlayOneShot(m_Ruins);
-                isOnRuins = true;
+                isNotOnSand = true;
 
 
             }
             if (other.tag == "Helipad")
             {
                 m_GroundAudio.PlayOneShot(m_Helipad);
-                isOnHelipad = true;
+                isNotOnSand = true;
 
             }
             if (other.tag == "Concrete")
             {
 
-                m_MovementAudio.Play();
-                isOnConcrete = true;
-                
-                
+                m_GroundAudio.PlayOneShot(m_Concrete);
+                isNotOnSand = true;
+
+
 
             }
         }
@@ -184,42 +178,36 @@ namespace Complete
             }
         }
 
-
-
-
-
-
-
-        private void FixedUpdate ()
+        
+        private void GroundSound()
         {
-            // Adjust the rigidbodies position and orientation in FixedUpdate.
-            Move ();
-            Turn ();
+            if (isNotOnSand == true)
+            {
+                if (Mathf.Abs(m_TurnInputValue) > 0.1f)
+                {
+                    audioMainMixer.SetFloat(PitchParam, 1.1f);
+
+                    Debug.Log(m_TurnInputValue);
+
+
+                }
+
+                else if(Mathf.Abs(m_TurnInputValue) < 0.5f)
+                {
+                    audioMainMixer.SetFloat(PitchParam, 1f);
+
+                   
+                }
+
+
+            }
+
         }
+        
 
 
-        private void Move ()
-        {
-            // Create a vector in the direction the tank is facing with a magnitude based on the input, speed and the time between frames.
-            Vector3 movement = transform.forward * m_MovementInputValue * m_Speed * Time.deltaTime;
-            
-            // Apply this movement to the rigidbody's position.
-            m_Rigidbody.MovePosition(m_Rigidbody.position + movement);
-
-
-
-        }
-
-        private void Turn ()
-        {
-            // Determine the number of degrees to be turned based on the input, speed and time between frames.
-            float turn = m_TurnInputValue * m_TurnSpeed * Time.deltaTime;
-
-            // Make this into a rotation in the y axis.
-            Quaternion turnRotation = Quaternion.Euler (0f, turn, 0f);
-
-            // Apply this rotation to the rigidbody's rotation.
-            m_Rigidbody.MoveRotation (m_Rigidbody.rotation * turnRotation);
-        }
     }
+
+
+    
 }

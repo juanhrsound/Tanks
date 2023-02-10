@@ -23,7 +23,7 @@ namespace Complete
         private float m_MovementInputValue;         // The current value of the movement input.
         private float m_TurnInputValue;             // The current value of the turn input.
         private float m_OriginalPitch;
-        private string PitchParamOfGround = "PitchParamOfGround";
+        //private string PitchParamOfGround = "PitchParamOfGround";
 
 
         //JH////
@@ -84,7 +84,6 @@ namespace Complete
 
             EngineAudio();
             GroundSound();
-            GroundSoundGrowing();
 
 
 
@@ -189,20 +188,21 @@ namespace Complete
         }
 
 
-        
-        private void GroundSoundGrowing()
+
+       
+        private void GroundSound()
         {
- 
             if (!m_GroundAudio.isPlaying)
             {
                 if (Mathf.Abs(m_MovementInputValue) > 0.1f)
 
                 {
-                    m_GroundAudio.pitch = Random.Range(0 , 1);
+                    m_GroundAudio.pitch = Random.Range(0.9f, 1);
                     m_GroundAudio.time = Random.Range(0, m_GroundAudio.clip.length);
                     m_GroundAudio.Play();
 
                 }
+
                 /*
                 if (Mathf.Abs(m_MovementInputValue) < 0.3f)
                 {
@@ -218,7 +218,7 @@ namespace Complete
 
             if (m_GroundAudio.isPlaying)
             {
-                if (Mathf.Abs(m_MovementInputValue) < 0.2f)
+                if (Mathf.Abs(m_MovementInputValue) < 0.1f)
 
                 {
                     m_GroundAudio.Stop();
@@ -226,12 +226,6 @@ namespace Complete
 
                 }
             }
-            
-        }
-
-       
-        private void GroundSound()
-        {
 
             //concrete and other materials
             if (isNotOnDirt == true)

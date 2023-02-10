@@ -7,7 +7,7 @@ public class Hits : MonoBehaviour
 {
     public GameObject gameObject;
     //Colliders // Crash
-    public AudioSource hits;
+    public AudioSource m_hits;
     
     public AudioClip[] m_Trees;
     public AudioClip[] m_Columns;
@@ -22,38 +22,59 @@ public class Hits : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "TankRuin")
-        {
-            hits.PlayOneShot(m_TankRuin[Random.Range(0, m_TankRuin.Length)]);
+        {            
+            m_hits.PlayOneShot(m_TankRuin[Random.Range(0, m_TankRuin.Length)]);
+            AudioParameters();
         }
         if (collision.gameObject.tag == "Tree")
         {
-            hits.PlayOneShot(m_Trees[Random.Range(0, m_Trees.Length)]);
+            AudioParameters();
+
+            m_hits.PlayOneShot(m_Trees[Random.Range(0, m_Trees.Length)]);
         }
         if (collision.gameObject.tag == "Column")
         {
-            hits.PlayOneShot(m_Columns[Random.Range(0, m_Columns.Length)]);
+            m_hits.PlayOneShot(m_Columns[Random.Range(0, m_Columns.Length)]);
+            AudioParameters();
+
         }
         if (collision.gameObject.tag == "Pumpjack")
         {
-            hits.PlayOneShot(m_Pumpjack[Random.Range(0, m_Pumpjack.Length)]);
+            m_hits.PlayOneShot(m_Pumpjack[Random.Range(0, m_Pumpjack.Length)]);
+            AudioParameters();
+
         }
         if (collision.gameObject.tag == "PalmTree")
         {
-            hits.PlayOneShot(m_PalmTrees[Random.Range(0, m_PalmTrees.Length)]);
+            AudioParameters();
+            m_hits.PlayOneShot(m_PalmTrees[Random.Range(0, m_PalmTrees.Length)]);
+
         }
         if (collision.gameObject.tag == "Radar")
         {
-            hits.PlayOneShot(m_Radar[Random.Range(0, m_Radar.Length)]);
+            m_hits.PlayOneShot(m_Radar[Random.Range(0, m_Radar.Length)]);
+            AudioParameters();
+
         }
         if (collision.gameObject.tag == "OilStorage")
         {
-            hits.PlayOneShot(m_OilStorage[Random.Range(0, m_OilStorage.Length)]);
+            m_hits.PlayOneShot(m_OilStorage[Random.Range(0, m_OilStorage.Length)]);
+            AudioParameters();
+
         }
         if (collision.gameObject.tag == "Buildings")
         {
-            hits.PlayOneShot(m_Buildings[Random.Range(0, m_Buildings.Length)]);
+            m_hits.PlayOneShot(m_Buildings[Random.Range(0, m_Buildings.Length)]);
+            AudioParameters();
+
         }
-    
+
+    }
+
+    private void AudioParameters()
+    {
+        m_hits.pitch = Random.Range(0.9f, 1);
+        m_hits.Play();
     }
 
 

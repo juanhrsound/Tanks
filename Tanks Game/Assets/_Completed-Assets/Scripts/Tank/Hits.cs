@@ -6,7 +6,6 @@ using UnityEngine.Audio;
 public class Hits : MonoBehaviour
 {
     public GameObject gameObject;
-    //Colliders // Crash
     public AudioSource m_hits;
     
     public AudioClip[] m_Trees;
@@ -21,21 +20,18 @@ public class Hits : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "TankRuin")
-        {            
-            m_hits.PlayOneShot(m_TankRuin[Random.Range(0, m_TankRuin.Length)]);
-            AudioParameters();
-        }
+        
         if (collision.gameObject.tag == "Tree")
         {
+            m_hits.PlayOneShot(m_Trees[Random.Range(0, m_Trees.Length)]);
             AudioParameters();
 
-            m_hits.PlayOneShot(m_Trees[Random.Range(0, m_Trees.Length)]);
         }
         if (collision.gameObject.tag == "Column")
         {
             m_hits.PlayOneShot(m_Columns[Random.Range(0, m_Columns.Length)]);
             AudioParameters();
+
 
         }
         if (collision.gameObject.tag == "Pumpjack")
@@ -43,17 +39,21 @@ public class Hits : MonoBehaviour
             m_hits.PlayOneShot(m_Pumpjack[Random.Range(0, m_Pumpjack.Length)]);
             AudioParameters();
 
+
         }
         if (collision.gameObject.tag == "PalmTree")
         {
-            AudioParameters();
             m_hits.PlayOneShot(m_PalmTrees[Random.Range(0, m_PalmTrees.Length)]);
+            AudioParameters();
+
 
         }
         if (collision.gameObject.tag == "Radar")
         {
+
             m_hits.PlayOneShot(m_Radar[Random.Range(0, m_Radar.Length)]);
             AudioParameters();
+
 
         }
         if (collision.gameObject.tag == "OilStorage")
@@ -61,11 +61,13 @@ public class Hits : MonoBehaviour
             m_hits.PlayOneShot(m_OilStorage[Random.Range(0, m_OilStorage.Length)]);
             AudioParameters();
 
+
         }
         if (collision.gameObject.tag == "Buildings")
         {
             m_hits.PlayOneShot(m_Buildings[Random.Range(0, m_Buildings.Length)]);
             AudioParameters();
+
 
         }
 
@@ -74,7 +76,7 @@ public class Hits : MonoBehaviour
     private void AudioParameters()
     {
         m_hits.pitch = Random.Range(0.9f, 1);
-        m_hits.Play();
+       
     }
 
 

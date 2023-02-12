@@ -113,6 +113,7 @@ namespace Complete
                     // ... change the clip to driving and play.
                     m_MovementAudio.clip = m_EngineDriving;
                     m_MovementAudio.pitch = Random.Range(m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
+                    m_MovementAudio.time = Random.Range(0, m_MovementAudio.clip.length);
                     m_MovementAudio.Play();
                     
                 }
@@ -197,8 +198,8 @@ namespace Complete
                 if (Mathf.Abs(m_MovementInputValue) > 0.1f)
 
                 {
-                    m_GroundAudio.pitch = Random.Range(0.9f, 1);
-                    m_GroundAudio.time = Random.Range(0, m_GroundAudio.clip.length);
+                    //m_GroundAudio.pitch = Random.Range(0.9f, 1);
+                    //m_GroundAudio.time = Random.Range(0, m_GroundAudio.clip.length);
                     m_GroundAudio.Play();
 
                 }
@@ -232,7 +233,7 @@ namespace Complete
             {
                 if (Mathf.Abs(m_TurnInputValue) > 0.1f)
                 {
-                    audioMainMixer.SetFloat(PitchParam, 1.1f);
+                    audioMainMixer.SetFloat(PitchParam, 1.2f);
 
                     Debug.Log(m_TurnInputValue);
 

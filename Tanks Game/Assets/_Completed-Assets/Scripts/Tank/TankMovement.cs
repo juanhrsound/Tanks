@@ -201,6 +201,7 @@ namespace Complete
                     //m_GroundAudio.pitch = Random.Range(0.9f, 1);
                     //m_GroundAudio.time = Random.Range(0, m_GroundAudio.clip.length);
                     m_GroundAudio.Play();
+                    m_GroundAudio.time = Random.Range(0, m_Ground.length);
 
                 }
 
@@ -233,7 +234,7 @@ namespace Complete
             {
                 if (Mathf.Abs(m_TurnInputValue) > 0.1f)
                 {
-                    audioMainMixer.SetFloat(PitchParam, 1.2f);
+                    //audioMainMixer.SetFloat(PitchParam, 1.2f);
 
                     Debug.Log(m_TurnInputValue);
 
@@ -242,7 +243,7 @@ namespace Complete
 
                 else if(Mathf.Abs(m_TurnInputValue) < 0.5f)
                 {
-                    audioMainMixer.SetFloat(PitchParam, 1f);
+                    //audioMainMixer.SetFloat(PitchParam, 1f);
 
                    
                 }

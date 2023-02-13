@@ -246,12 +246,12 @@ namespace Complete
 
                 }
 
-                if (Mathf.Abs(m_TurnInputValue) > 0.1f)
+                if (Mathf.Abs(m_TurnInputValue) > 0.2f)
                 {
 
-                    //audioMainMixer.SetFloat(PitchParamOfGround, 1.2f);
-                    //audioMainMixer.SetFloat(groundVol, 0f);
-                    m_TurningGround.PlayOneShot(m_groundTurning[Random.Range(0, m_groundTurning.Length)]);
+                    audioMainMixer.SetFloat(PitchParamOfGround, 1.2f);
+                    audioMainMixer.SetFloat(groundVol, 0f);
+                    //m_TurningGround.PlayOneShot(m_groundTurning[Random.Range(0, m_groundTurning.Length)]);
                     Debug.Log("play turn");
                 }
 

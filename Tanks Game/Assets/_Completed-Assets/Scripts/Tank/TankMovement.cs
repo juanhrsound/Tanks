@@ -8,7 +8,7 @@ namespace Complete
     public class TankMovement : MonoBehaviour
     {
         public int m_PlayerNumber = 1;              // Used to identify which tank belongs to which player.  This is set by this tank's manager.
-        public float m_Speed = 12f;                 // How fast the tank moves forward and back.
+        public float m_Speed = 6f;                 // How fast the tank moves forward and back.
         public float m_TurnSpeed = 180f;            // How fast the tank turns in degrees per second.
         public AudioSource m_MovementAudio;         // Reference to the audio source used to play engine sounds. NB: different to the shooting audio source.
         
@@ -29,10 +29,18 @@ namespace Complete
         //JH////
 
         public AudioMixer audioMainMixer;
-        private string PitchParam = "PitchParam";
+        private string PitchParamOfGround = "PitchParamOfGround";
+        private string groundVol = "groundVol";
 
         public AudioSource m_GroundAudio;
         public AudioClip m_Ground;
+
+
+        //public AudioClip m_increaseSpeed;
+        //public AudioClip m_descreaseSpeed;
+
+        public AudioSource m_TurningGround;
+        public AudioClip[] m_groundTurning;
 
         public AudioClip m_Ruins;        
         public AudioClip m_Helipad;
@@ -101,7 +109,7 @@ namespace Complete
                     // ... change the clip to idling and play it.
                     m_MovementAudio.clip = m_EngineIdling;
                     m_MovementAudio.pitch = Random.Range(m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
-                    m_MovementAudio.Play();
+                    Invoke("PlayEngine", 0f);
                     
                 }
             }
@@ -114,12 +122,19 @@ namespace Complete
                     m_MovementAudio.clip = m_EngineDriving;
                     m_MovementAudio.pitch = Random.Range(m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
                     m_MovementAudio.time = Random.Range(0, m_MovementAudio.clip.length);
-                    m_MovementAudio.Play();
-                    
+                    Invoke("PlayEngine", 0f);
+
+
                 }
             }
         }
 
+
+        //JH
+        private void PlayEngine()
+        {
+            m_MovementAudio.Play();
+        }
 
 
         private void FixedUpdate()
@@ -198,12 +213,15 @@ namespace Complete
                 if (Mathf.Abs(m_MovementInputValue) > 0.1f)
 
                 {
-                    //m_GroundAudio.pitch = Random.Range(0.9f, 1);
-                    //m_GroundAudio.time = Random.Range(0, m_GroundAudio.clip.length);
+                    m_GroundAudio.pitch = Random.Range(0.9f, 1);
+                    m_GroundAudio.time = Random.Range(0, m_GroundAudio.clip.length);
                     m_GroundAudio.Play();
+                    m_MovementAudio.Play();
                     m_GroundAudio.time = Random.Range(0, m_Ground.length);
 
                 }
+                
+
 
                 /*
                 if (Mathf.Abs(m_MovementInputValue) < 0.3f)
@@ -227,6 +245,20 @@ namespace Complete
                     Debug.Log("TERMINAR" + "m_MovementInputValue ");
 
                 }
+
+                if (Mathf.Abs(m_TurnInputValue) > 0.1f)
+                {
+
+                    //audioMainMixer.SetFloat(PitchParamOfGround, 1.2f);
+                    //audioMainMixer.SetFloat(groundVol, 0f);
+                    m_TurningGround.PlayOneShot(m_groundTurning[Random.Range(0, m_groundTurning.Length)]);
+                    Debug.Log("play turn");
+                }
+
+
+
+
+
             }
 
             //concrete and other materials

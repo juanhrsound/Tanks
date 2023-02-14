@@ -29,7 +29,7 @@ namespace Complete
         //JH////
 
         public AudioMixer audioMainMixer;
-        private string PitchParamOfGround = "PitchParamOfGround";
+        private string pitchParamOfGround = "pitchParamOfGround";
         private string groundVol = "groundVol";
 
         public AudioSource m_GroundAudio;
@@ -120,7 +120,7 @@ namespace Complete
                 {
                     // ... change the clip to driving and play.
                     m_MovementAudio.clip = m_EngineDriving;
-                    m_MovementAudio.pitch = Random.Range(m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
+                    //m_MovementAudio.pitch = Random.Range(m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
                     m_MovementAudio.time = Random.Range(0, m_MovementAudio.clip.length);
                     Invoke("PlayEngine", 0f);
 
@@ -142,6 +142,7 @@ namespace Complete
             // Adjust the rigidbodies position and orientation in FixedUpdate.
             Move();
             Turn();
+            Debug.Log(m_MovementInputValue);
         }
 
 
@@ -220,46 +221,45 @@ namespace Complete
                     m_GroundAudio.time = Random.Range(0, m_Ground.length);
 
                 }
-                
-
-
-                /*
-                if (Mathf.Abs(m_MovementInputValue) < 0.3f)
+                 else if (Mathf.Abs(m_TurnInputValue) > 0.1f)
                 {
-                    m_GroundAudio.pitch = 1.2f;
-                    //audioMainMixer.SetFloat(PitchParamOfGround, 1f);
-
-                    m_GroundAudio.time = Random.Range(0, m_GroundAudio.clip.length);
-                    //Debug.Log(m_MovementInputValue);
-                }*/
+                    m_GroundAudio.Play();
+                    audioMainMixer.SetFloat(pitchParamOfGround, 1.2f);
+                    audioMainMixer.SetFloat(groundVol, -4f);
+                    //m_TurningGround.PlayOneShot(m_groundTurning[Random.Range(0, m_groundTurning.Length)]);
+                    Debug.Log("play turn");
+                }
 
 
             }
 
             if (m_GroundAudio.isPlaying)
             {
-                if (Mathf.Abs(m_MovementInputValue) < 0.1f)
+                if (Mathf.Abs(m_MovementInputValue) == 0f && Mathf.Abs(m_TurnInputValue) == 0f)
 
                 {
                     m_GroundAudio.Stop();
-                    Debug.Log("TERMINAR" + "m_MovementInputValue ");
 
                 }
-
-                if (Mathf.Abs(m_TurnInputValue) > 0.2f)
+                
+                else if (Mathf.Abs(m_TurnInputValue) > 0.1f)
                 {
+                    audioMainMixer.SetFloat(pitchParamOfGround, 1.2f);
+                    audioMainMixer.SetFloat(groundVol, -4f);
 
-                    audioMainMixer.SetFloat(PitchParamOfGround, 1.2f);
-                    audioMainMixer.SetFloat(groundVol, 0f);
-                    //m_TurningGround.PlayOneShot(m_groundTurning[Random.Range(0, m_groundTurning.Length)]);
-                    Debug.Log("play turn");
                 }
 
+                else if(Mathf.Abs(m_TurnInputValue) < 0.1f)
+                {
+                    audioMainMixer.SetFloat(pitchParamOfGround, 1f);
+                    audioMainMixer.SetFloat(groundVol, -9f);
 
-
+                }
 
 
             }
+
+            
 
             //concrete and other materials
             if (isNotOnDirt == true)

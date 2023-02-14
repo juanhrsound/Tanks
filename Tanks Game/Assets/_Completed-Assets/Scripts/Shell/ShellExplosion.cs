@@ -68,13 +68,13 @@ namespace Complete
             //JH---------
            // Invoke("ExplosionDebris", Random.Range(0, 0.3f));
 
-            ExplosionDebris();
+            //ExplosionDebris();
 
 
 
         }
 
-
+        /*
         //JH---------
         //Invokes the method "DebrisOnly_0 - DebrisOnly_3" after a random time between 0 and 1 seconds
 
@@ -118,7 +118,7 @@ namespace Complete
         }
         //---------------
 
-
+        */
 
         private float CalculateDamage (Vector3 targetPosition)
         {

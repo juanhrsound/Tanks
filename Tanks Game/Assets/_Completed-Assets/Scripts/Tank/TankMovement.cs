@@ -30,23 +30,23 @@ namespace Complete
 
         public AudioMixer audioMainMixer;
         private string pitchParamOfGround = "pitchParamOfGround";
+        private string PitchParam = "PitchParam";
+
         private string groundVol = "groundVol";
+        private string movVol = "movVol";
 
         public AudioSource m_GroundAudio;
         public AudioClip m_Ground;
+        public AudioClip m_Concrete;
+        public AudioClip m_ConcreteDriving;
 
-
-        //public AudioClip m_increaseSpeed;
-        //public AudioClip m_descreaseSpeed;
+        //public AudioClip m_Ruins;
+        //public AudioClip m_Helipad;
 
         public AudioSource m_TurningGround;
         public AudioClip[] m_groundTurning;
 
-        public AudioClip m_Ruins;        
-        public AudioClip m_Helipad;
-        public AudioClip m_Concrete;
-
-        private bool isNotOnDirt;
+        private bool isOnConcrete;
 
         
         private void Awake()
@@ -103,13 +103,19 @@ namespace Complete
             // If there is no input (the tank is stationary)...
             if (Mathf.Abs(m_MovementInputValue) < 0.1f && Mathf.Abs(m_TurnInputValue) < 0.1f)
             {
+
+
+
                 // ... and if the audio source is currently playing the driving clip...
                 if (m_MovementAudio.clip == m_EngineDriving)
                 {
                     // ... change the clip to idling and play it.
                     m_MovementAudio.clip = m_EngineIdling;
-                    m_MovementAudio.pitch = Random.Range(m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
+                    audioMainMixer.SetFloat(movVol, -7f);
+
+                    //m_MovementAudio.pitch = Random.Range(m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
                     Invoke("PlayEngine", 0f);
+                    audioMainMixer.SetFloat(movVol, -7f);
                     
                 }
             }
@@ -120,6 +126,7 @@ namespace Complete
                 {
                     // ... change the clip to driving and play.
                     m_MovementAudio.clip = m_EngineDriving;
+                    audioMainMixer.SetFloat(movVol, -5f);
                     //m_MovementAudio.pitch = Random.Range(m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
                     m_MovementAudio.time = Random.Range(0, m_MovementAudio.clip.length);
                     Invoke("PlayEngine", 0f);
@@ -172,39 +179,41 @@ namespace Complete
 
         private void OnTriggerEnter(Collider other)
         {
+            /*
             if (other.tag == "Ruins")
             {
-                m_GroundAudio.PlayOneShot(m_Ruins);
+                m_GroundAudio.clip = m_Ruins;
                 isNotOnDirt = true;
 
 
             }
             else if (other.tag == "Helipad")
             {
-                m_GroundAudio.PlayOneShot(m_Helipad);
+                m_GroundAudio.clip = m_Helipad;
                 isNotOnDirt = true;
 
-            }
-            else if (other.tag == "Concrete")
+            }*/
+
+            if (other.tag == "Concrete")
             {
-
-                m_GroundAudio.PlayOneShot(m_Concrete);
-                isNotOnDirt = true;
-
+                //audioMainMixer.SetFloat(groundVol, 0f);
+                m_MovementAudio.clip = m_ConcreteDriving;
+                m_GroundAudio.clip = m_Concrete;
+                
+                isOnConcrete = true;
             }
-            
+
         }
+
 
         private void OnTriggerExit(Collider other)
         {
-            if (m_GroundAudio.isPlaying)
-            {
-                m_GroundAudio.Stop();
+            m_MovementAudio.clip = m_EngineDriving;
+            m_GroundAudio.clip = m_Ground;
+            isOnConcrete = false;
+            
 
-            }
         }
-
-
 
        
         private void GroundSound()
@@ -214,7 +223,7 @@ namespace Complete
                 if (Mathf.Abs(m_MovementInputValue) > 0.1f)
 
                 {
-                    m_GroundAudio.pitch = Random.Range(0.9f, 1);
+                    //m_GroundAudio.pitch = Random.Range(0.9f, 1);
                     m_GroundAudio.time = Random.Range(0, m_GroundAudio.clip.length);
                     m_GroundAudio.Play();
                     m_MovementAudio.Play();
@@ -226,8 +235,8 @@ namespace Complete
                     m_GroundAudio.Play();
                     audioMainMixer.SetFloat(pitchParamOfGround, 1.2f);
                     audioMainMixer.SetFloat(groundVol, -4f);
-                    //m_TurningGround.PlayOneShot(m_groundTurning[Random.Range(0, m_groundTurning.Length)]);
-                    Debug.Log("play turn");
+
+                    Debug.Log(m_TurnInputValue);
                 }
 
 
@@ -252,34 +261,26 @@ namespace Complete
                 else if(Mathf.Abs(m_TurnInputValue) < 0.1f)
                 {
                     audioMainMixer.SetFloat(pitchParamOfGround, 1f);
-                    audioMainMixer.SetFloat(groundVol, -9f);
+                    audioMainMixer.SetFloat(groundVol, -7f);
 
                 }
 
 
             }
-
+                       
             
-
-            //concrete and other materials
-            if (isNotOnDirt == true)
+            if (isOnConcrete == true)
             {
                 if (Mathf.Abs(m_TurnInputValue) > 0.1f)
                 {
-                    //audioMainMixer.SetFloat(PitchParam, 1.2f);
+                    audioMainMixer.SetFloat(pitchParamOfGround, 1.3f);
+                    audioMainMixer.SetFloat(groundVol, -4f);
 
-                    Debug.Log(m_TurnInputValue);
+                    //m_GroundAudio.clip = m_groundTurning[0];
+                    //m_GroundAudio.time = Random.Range(0, m_GroundAudio.clip.length);
 
 
                 }
-
-                else if(Mathf.Abs(m_TurnInputValue) < 0.5f)
-                {
-                    //audioMainMixer.SetFloat(PitchParam, 1f);
-
-                   
-                }
-
 
             }
             

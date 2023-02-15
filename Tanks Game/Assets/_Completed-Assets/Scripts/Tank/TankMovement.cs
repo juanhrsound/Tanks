@@ -8,7 +8,7 @@ namespace Complete
     public class TankMovement : MonoBehaviour
     {
         public int m_PlayerNumber = 1;              // Used to identify which tank belongs to which player.  This is set by this tank's manager.
-        public float m_Speed = 6f;                 // How fast the tank moves forward and back.
+        public float m_Speed = 12f;                 // How fast the tank moves forward and back.
         public float m_TurnSpeed = 180f;            // How fast the tank turns in degrees per second.
         public AudioSource m_MovementAudio;         // Reference to the audio source used to play engine sounds. NB: different to the shooting audio source.
         
@@ -23,6 +23,8 @@ namespace Complete
         private float m_MovementInputValue;         // The current value of the movement input.
         private float m_TurnInputValue;             // The current value of the turn input.
         private float m_OriginalPitch;
+        private ParticleSystem[] m_particleSystems; // References to all the particles systems used by the Tanks
+
         //private string PitchParamOfGround = "PitchParamOfGround";
 
 
@@ -40,8 +42,7 @@ namespace Complete
         public AudioClip m_Concrete;
         public AudioClip m_ConcreteDriving;
 
-        //public AudioClip m_Ruins;
-        //public AudioClip m_Helipad;
+        
 
         public AudioSource m_TurningGround;
         public AudioClip[] m_groundTurning;
@@ -63,6 +64,15 @@ namespace Complete
             // Also reset the input values.
             m_MovementInputValue = 0f;
             m_TurnInputValue = 0f;
+
+            // We grab all the Particle systems child of that Tank to be able to Stop/Play them on Deactivate/Activate
+            // It is needed because we move the Tank when spawning it, and if the Particle System is playing while we do that
+            // it "think" it move from (0,0,0) to the spawn point, creating a huge trail of smoke
+            m_particleSystems = GetComponentsInChildren<ParticleSystem>();
+            for (int i = 0; i < m_particleSystems.Length; ++i)
+            {
+                m_particleSystems[i].Play();
+            }
         }
 
 
@@ -70,6 +80,12 @@ namespace Complete
         {
             // When the tank is turned off, set it to kinematic so it stops moving.
             m_Rigidbody.isKinematic = true;
+
+            // Stop all particle system so it "reset" it's position to the actual one instead of thinking we moved when spawning
+            for (int i = 0; i < m_particleSystems.Length; ++i)
+            {
+                m_particleSystems[i].Stop();
+            }
         }
 
 
@@ -174,47 +190,30 @@ namespace Complete
             // Apply this rotation to the rigidbody's rotation.
             m_Rigidbody.MoveRotation(m_Rigidbody.rotation * turnRotation);
         }
-
-
-
-        private void OnTriggerEnter(Collider other)
+        
+        private void OnCollisionEnter(Collision collision)
         {
-            /*
-            if (other.tag == "Ruins")
+            if (collision.gameObject.tag == "Concrete")
             {
-                m_GroundAudio.clip = m_Ruins;
-                isNotOnDirt = true;
-
-
-            }
-            else if (other.tag == "Helipad")
-            {
-                m_GroundAudio.clip = m_Helipad;
-                isNotOnDirt = true;
-
-            }*/
-
-            if (other.tag == "Concrete")
-            {
-                //audioMainMixer.SetFloat(groundVol, 0f);
                 m_MovementAudio.clip = m_ConcreteDriving;
                 m_GroundAudio.clip = m_Concrete;
-                
-                isOnConcrete = true;
-            }
+                audioMainMixer.SetFloat(groundVol, 0f);
 
+                isOnConcrete = true;
+             
+                                
+            }
         }
 
-
-        private void OnTriggerExit(Collider other)
+        private void OnCollisionExit(Collision collision)
         {
             m_MovementAudio.clip = m_EngineDriving;
             m_GroundAudio.clip = m_Ground;
             isOnConcrete = false;
-            
 
         }
-
+        
+        
        
         private void GroundSound()
         {
@@ -223,7 +222,7 @@ namespace Complete
                 if (Mathf.Abs(m_MovementInputValue) > 0.1f)
 
                 {
-                    //m_GroundAudio.pitch = Random.Range(0.9f, 1);
+                    m_GroundAudio.pitch = Random.Range(0.9f, 1);
                     m_GroundAudio.time = Random.Range(0, m_GroundAudio.clip.length);
                     m_GroundAudio.Play();
                     m_MovementAudio.Play();

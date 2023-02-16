@@ -18,10 +18,8 @@ namespace Complete
 
         //JH---------
         public AudioSource m_ExplosionAudio;                // Reference to the audio that will play on explosion.
-        public AudioClip m_Woosh;
+        //public AudioClip m_Woosh;
         //public AudioClip[] m_ExplosionClip;
-        private bool IsTouchingTheGround;
-        public LayerMask groundMask;
 
 
 
@@ -31,37 +29,38 @@ namespace Complete
         {
             // If it isn't destroyed by then, destroy the shell after it's lifetime.
             Destroy (gameObject, m_MaxLifeTime);
-
             
+
+
         }
 
         private void Update()
         {
-            Debug.DrawRay(this.transform.position, Vector3.back * 1.5f, Color.red);
-            TouchingTheGround();
+            //Debug.DrawRay(this.transform.position, Vector3.down * 2f, Color.red);
+            //Debug.DrawRay(this.transform.position, Vector3.back * 2f, Color.red);
+            //TouchingTheGround();
 
 
 
         }
-
+        /*
         private void TouchingTheGround()
         {
-            if (Physics.Raycast(this.transform.position, Vector3.back, 1.5f, groundMask))
+            if (!hasPlayedWoosh && (Physics.Raycast(this.transform.position, Vector3.down, 1.5f, groundMask)
+                || Physics.Raycast(this.transform.position, Vector3.back, 1.5f, groundMask)))
             {
                 Debug.Log("TOUCH!");
-
+                m_ExplosionAudio.PlayOneShot(m_Woosh);
+                hasPlayedWoosh = true;
+            }
+            else if (hasPlayedWoosh && !(Physics.Raycast(this.transform.position, Vector3.down, 1.5f, groundMask)
+                || Physics.Raycast(this.transform.position, Vector3.back, 1.5f, groundMask)))
+            {
+                // reset the flag if the condition is no longer met
+                hasPlayedWoosh = false;
             }
 
-
-
-            /*
-            if (Physics.Raycast(transform.position, -Vector3.up, out hit, 0.5f))
-            {
-                Debug.Log("now");
-
-
-            }*/
-        }
+        }*/
 
         private void OnTriggerEnter (Collider other)
         {        
@@ -199,6 +198,8 @@ namespace Complete
             
 
         }
+
+
 
     }
 }

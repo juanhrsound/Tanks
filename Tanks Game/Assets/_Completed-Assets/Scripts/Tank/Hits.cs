@@ -6,6 +6,8 @@ using UnityEngine.Audio;
 public class Hits : MonoBehaviour
 {
     public GameObject gameObject;
+    public GameObject shell;
+
     public AudioSource m_hits;
     
     public AudioClip[] m_Trees;
@@ -18,15 +20,19 @@ public class Hits : MonoBehaviour
     public AudioClip[] m_TankRuin;
 
 
+    private void Awake()
+    {
+        shell = gameObject.GetComponent<GameObject>();
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        
         if (collision.gameObject.tag == "Tree")
         {
             m_hits.PlayOneShot(m_Trees[Random.Range(0, m_Trees.Length)]);
             RandomPitch();
-
         }
+      
         if (collision.gameObject.tag == "Column")
         {
             m_hits.PlayOneShot(m_Columns[Random.Range(0, m_Columns.Length)]);

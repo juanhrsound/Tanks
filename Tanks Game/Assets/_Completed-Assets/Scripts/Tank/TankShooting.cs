@@ -11,7 +11,7 @@ namespace Complete
         public Transform m_FireTransform;           // A child of the tank where the shells are spawned.
         public Slider m_AimSlider;                  // A child of the tank that displays the current launch force.
         public AudioSource m_ShootingAudio;         // Reference to the audio source used to play the shooting audio. NB: different to the movement audio source.
-        public AudioClip m_ChargingClip;            // Audio that plays when each shot is charging up.
+        //public AudioClip m_ChargingClip;            // Audio that plays when each shot is charging up.
 
         //JH ---- 
         public AudioMixer audioMixer;
@@ -29,7 +29,10 @@ namespace Complete
         private string decayTime = "decayTime";
        //private string LowPassShootingfx = "lowPassShootingfx";
         private string lowPassShooting = "lowPassShooting";
+        private string shiftShoots = "shiftShoots";
 
+        public AudioSource audioBoom;
+        //public AudioClip Boom;
 
         //JH ----
 
@@ -83,7 +86,7 @@ namespace Complete
                 m_CurrentLaunchForce = m_MinLaunchForce;
 
                 // Change the clip to the charging clip and start it playing.
-                m_ShootingAudio.clip = m_ChargingClip;
+                //m_ShootingAudio.clip = m_ChargingClip;
                 m_ShootingAudio.Play();
             }
             // Otherwise, if the fire button is being held and the shell hasn't been launched yet...
@@ -94,8 +97,14 @@ namespace Complete
 
                 m_AimSlider.value = m_CurrentLaunchForce;
 
+                /*
+                audioBoom.pitch = (m_AimSlider.value * 0.06f);
+                audioBoom.Play();
 
+                Debug.Log(m_AimSlider.value);
+                */
             }
+
 
             // Otherwise, if the fire button is released and the shell hasn't been launched yet...
             else if (Input.GetButtonUp(m_FireButton) && !m_Fired)
@@ -121,22 +130,24 @@ namespace Complete
 
             // Change the clip to the firing clip and play it.
             m_ShootingAudio.PlayOneShot(m_FireClip[Random.Range(0, m_FireClip.Length)]);
-            //m_ShootingAudio.pitch = Random.Range(0.98f, 1f);
 
+            
             if (m_CurrentLaunchForce < 18f)
             {
                 m_ShootingAudio.volume = 0.8f;
                 m_ShootingAudio.pitch = Random.Range(0.95f, 1f);
-                audioMixer.SetFloat("lowPassShooting", 30f);
+                audioMixer.SetFloat("lowPassShooting", Random.Range(130f, 150f));
 
             }
             if (m_CurrentLaunchForce > 18f)
             {
                 m_ShootingAudio.volume = 1f;
-                m_ShootingAudio.pitch = Random.Range(0.84f, 0.899f);
+                audioMixer.SetFloat("shiftShoots", Random.Range(0.77f, 0.80f));
                 audioMixer.SetFloat("lowPassShooting", 10f);
+
             }
 
+            Debug.Log(m_AimSlider.value);
            
 
             //m_ShootingAudio.volume = Random.Range(0.92f, 1f);

@@ -44,8 +44,8 @@ namespace Complete
 
         
 
-        public AudioSource m_TurningGround;
-        public AudioClip[] m_groundTurning;
+        //public AudioSource m_TurningGround;
+        //public AudioClip[] m_groundTurning;
 
         private bool isOnConcrete;
 

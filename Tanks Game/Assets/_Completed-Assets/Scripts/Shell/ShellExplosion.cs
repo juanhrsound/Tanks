@@ -20,6 +20,7 @@ namespace Complete
         public AudioSource m_ExplosionAudio;                // Reference to the audio that will play on explosion.
         //public AudioClip m_Woosh;
         //public AudioClip[] m_ExplosionClip;
+        public DebrisSound debrisSound;
 
 
 
@@ -99,7 +100,8 @@ namespace Complete
             m_ExplosionParticles.transform.parent = null;
 
             // Play the particle system.
-            m_ExplosionParticles.Play();
+            //m_ExplosionParticles.Play();
+            //Explode();
 
             // Play the explosion sound effect.
 
@@ -108,15 +110,13 @@ namespace Complete
             m_ExplosionAudio.Play();
 
             
-
-
-
             // Once the particles have finished, destroy the gameobject they are on.
             ParticleSystem.MainModule mainModule = m_ExplosionParticles.main;
             Destroy(m_ExplosionParticles.gameObject, mainModule.duration);
 
             // Destroy the shell.
             Destroy(gameObject);
+
 
             /*
             //JH---------
@@ -127,52 +127,15 @@ namespace Complete
         }
 
         
-
-
-        //JH---------
-        //Invokes the method "DebrisOnly_0 - DebrisOnly_3" after a random time between 0 and 1 seconds
-
-
-        private void ExplosionDebris()
+        /*
+        private void Explode()
         {
-            Invoke("DebrisOnly_0", Random.Range(0, 1));
-            Invoke("DebrisOnly_1", Random.Range(0, 1));
-            Invoke("DebrisOnly_2", Random.Range(0, 1));
-            Invoke("DebrisOnly_3", Random.Range(0, 1));
-        // Invokes the method "DestroyingShell" after 7 seconds
-            Invoke("DestroyingShell", 7f);                   
+            // Play the debris sound using the values stored in the "Debris Sound" ScriptableObject
+            AudioSource.PlayClipAtPoint(debrisSound.debrisClip, transform.position, debrisSound.volume);
+            // Adjust the pitch of the debris sound
+            AudioSource.PlayClipAtPoint(debrisSound.debrisClip, transform.position, debrisSound.volume * debrisSound.pitch);
+        }*/
 
-        }
-
-       /*
-
-        private void DebrisOnly_0()
-        {
-            m_ExplosionAudio.PlayOneShot(m_ExplosionClip[0], Random.Range(0.9f, 1f));
-        }
-        private void DebrisOnly_1()
-        {
-            m_ExplosionAudio.PlayOneShot(m_ExplosionClip[1], Random.Range(0.9f, 1f));
-        }
-        private void DebrisOnly_2()
-        {
-            m_ExplosionAudio.PlayOneShot(m_ExplosionClip[2], Random.Range(0.2f, 0.3f));
-        }
-        private void DebrisOnly_3()
-        {
-            m_ExplosionAudio.PlayOneShot(m_ExplosionClip[3], Random.Range(0.9f, 1f));
-        }
-
-
-        void DestroyingShell()
-        {
-            ParticleSystem.MainModule mainModule = m_ExplosionParticles.main;
-            Destroy(m_ExplosionParticles.gameObject, mainModule.duration);
-            Destroy(gameObject);
-        }
-        //---------------
-
-        */
 
         private float CalculateDamage (Vector3 targetPosition)
         {
@@ -190,8 +153,6 @@ namespace Complete
 
             // Make sure that the minimum damage is always 0.
             damage = Mathf.Max (0f, damage);
-
-            
 
             return damage;
 

@@ -27,12 +27,11 @@ namespace Complete
         private float decayTimeMax = 16.77f;                          
         
         private string decayTime = "decayTime";
-       //private string LowPassShootingfx = "lowPassShootingfx";
         private string lowPassShooting = "lowPassShooting";
         private string shiftShoots = "shiftShoots";
-
-        public AudioSource audioBoom;
-        //public AudioClip Boom;
+        private string roomShootingReverb = "roomShootingReverb";
+        private string reflectDelay = "reflectDelay";
+               
 
         //JH ----
 
@@ -97,12 +96,6 @@ namespace Complete
 
                 m_AimSlider.value = m_CurrentLaunchForce;
 
-                /*
-                audioBoom.pitch = (m_AimSlider.value * 0.06f);
-                audioBoom.Play();
-
-                Debug.Log(m_AimSlider.value);
-                */
             }
 
 
@@ -134,24 +127,28 @@ namespace Complete
             
             if (m_CurrentLaunchForce < 18f)
             {
-                m_ShootingAudio.volume = 0.8f;
-                m_ShootingAudio.pitch = Random.Range(0.95f, 1f);
-                audioMixer.SetFloat("lowPassShooting", Random.Range(130f, 150f));
 
+                m_ShootingAudio.volume = Random.Range(0.70f, 0.75f);
+                audioMixer.SetFloat("shiftShoots", Random.Range(0.95f, 1f));
+                audioMixer.SetFloat("lowPassShooting", Random.Range(130f, 150f));
+                //Reverb Parameters
+                audioMixer.SetFloat("roomShootingReverb", Random.Range(-4788f, -4288f));
+                audioMixer.SetFloat("reflectDelay", Random.Range(0.2f, 0.25f));
             }
+            
             if (m_CurrentLaunchForce > 18f)
             {
-                m_ShootingAudio.volume = 1f;
-                audioMixer.SetFloat("shiftShoots", Random.Range(0.77f, 0.80f));
+                m_ShootingAudio.volume = Random.Range(0.99f, 1f);
+                audioMixer.SetFloat("shiftShoots", Random.Range(0.62f, 0.70f));
                 audioMixer.SetFloat("lowPassShooting", 10f);
+                //Reverb Parameters
+                audioMixer.SetFloat("roomShootingReverb", Random.Range(-800,-810));
+                audioMixer.SetFloat("reflectDelay", Random.Range(0.28f, 0.3f));
 
             }
 
             Debug.Log(m_AimSlider.value);
            
-
-            //m_ShootingAudio.volume = Random.Range(0.92f, 1f);
-
             // Reset the launch force.  This is a precaution in case of missing button events.
             m_CurrentLaunchForce = m_MinLaunchForce;
         }

@@ -165,7 +165,7 @@ namespace Complete
             // Adjust the rigidbodies position and orientation in FixedUpdate.
             Move();
             Turn();
-            Debug.Log(m_MovementInputValue);
+            //Debug.Log(m_MovementInputValue);
         }
 
 
@@ -233,7 +233,7 @@ namespace Complete
                     audioMainMixer.SetFloat(pitchParamOfGround, 1.2f);
                     audioMainMixer.SetFloat(groundVol, -4f);
 
-                    Debug.Log(m_TurnInputValue);
+                    //Debug.Log(m_TurnInputValue);
                 }
 
 

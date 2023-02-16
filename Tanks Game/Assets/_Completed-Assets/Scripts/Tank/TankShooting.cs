@@ -25,8 +25,12 @@ namespace Complete
         private float lowPassMax = 2140f;
         private float decayTimeMin = 15.77f;
         private float decayTimeMax = 16.77f;                          
-        private string lowPassShooting = "lowPassShooting";
+        
         private string decayTime = "decayTime";
+       //private string LowPassShootingfx = "lowPassShootingfx";
+        private string lowPassShooting = "lowPassShooting";
+
+
         //JH ----
 
 
@@ -90,9 +94,6 @@ namespace Complete
 
                 m_AimSlider.value = m_CurrentLaunchForce;
 
-                Debug.Log(m_CurrentLaunchForce);
-
-
 
             }
 
@@ -120,8 +121,25 @@ namespace Complete
 
             // Change the clip to the firing clip and play it.
             m_ShootingAudio.PlayOneShot(m_FireClip[Random.Range(0, m_FireClip.Length)]);
-            m_ShootingAudio.pitch = Random.Range(0.98f, 1f);
-            m_ShootingAudio.volume = Random.Range(0.92f, 1f);
+            //m_ShootingAudio.pitch = Random.Range(0.98f, 1f);
+
+            if (m_CurrentLaunchForce < 18f)
+            {
+                m_ShootingAudio.volume = 0.8f;
+                m_ShootingAudio.pitch = Random.Range(0.95f, 1f);
+                audioMixer.SetFloat("lowPassShooting", 30f);
+
+            }
+            if (m_CurrentLaunchForce > 18f)
+            {
+                m_ShootingAudio.volume = 1f;
+                m_ShootingAudio.pitch = Random.Range(0.84f, 0.899f);
+                audioMixer.SetFloat("lowPassShooting", 10f);
+            }
+
+           
+
+            //m_ShootingAudio.volume = Random.Range(0.92f, 1f);
 
             // Reset the launch force.  This is a precaution in case of missing button events.
             m_CurrentLaunchForce = m_MinLaunchForce;

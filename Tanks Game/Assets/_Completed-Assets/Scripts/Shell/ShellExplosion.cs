@@ -14,21 +14,54 @@ namespace Complete
         public float m_ExplosionForce = 1000f;              // The amount of force added to a tank at the centre of the explosion.
         public float m_MaxLifeTime = 2f;                    // The time in seconds before the shell is removed.
         public float m_ExplosionRadius = 5f;                // The maximum distance away from the explosion tanks can be and are still affected.
-        public GameObject gameObject;
+
 
         //JH---------
         public AudioSource m_ExplosionAudio;                // Reference to the audio that will play on explosion.
+        public AudioClip m_Woosh;
         //public AudioClip[] m_ExplosionClip;
+        private bool IsTouchingTheGround;
+        public LayerMask groundMask;
 
 
-        
+
+
 
         private void Start ()
         {
             // If it isn't destroyed by then, destroy the shell after it's lifetime.
             Destroy (gameObject, m_MaxLifeTime);
+
+            
         }
 
+        private void Update()
+        {
+            Debug.DrawRay(this.transform.position, Vector3.back * 1.5f, Color.red);
+            TouchingTheGround();
+
+
+
+        }
+
+        private void TouchingTheGround()
+        {
+            if (Physics.Raycast(this.transform.position, Vector3.back, 1.5f, groundMask))
+            {
+                Debug.Log("TOUCH!");
+
+            }
+
+
+
+            /*
+            if (Physics.Raycast(transform.position, -Vector3.up, out hit, 0.5f))
+            {
+                Debug.Log("now");
+
+
+            }*/
+        }
 
         private void OnTriggerEnter (Collider other)
         {        
@@ -72,7 +105,10 @@ namespace Complete
             // Play the explosion sound effect.
 
             //m_ExplosionAudio.Play();
-            Invoke("ShellExplosions", -1f);
+
+            m_ExplosionAudio.Play();
+
+            
 
 
 
@@ -92,13 +128,6 @@ namespace Complete
         }
 
         
-
-
-        private void ShellExplosions()
-        {
-            m_ExplosionAudio.Play();
-
-        }
 
 
         //JH---------
@@ -163,7 +192,12 @@ namespace Complete
             // Make sure that the minimum damage is always 0.
             damage = Mathf.Max (0f, damage);
 
+            
+
             return damage;
+
+            
+
         }
 
     }

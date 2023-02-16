@@ -15,7 +15,7 @@ namespace Complete
 
         //JH ---- 
         public AudioMixer audioMixer;
-        public AudioClip m_FireClip;
+        public AudioClip [] m_FireClip;
 
         private float volumeMin = 0.4f;
         private float volumeMax = 0.5f;
@@ -89,7 +89,13 @@ namespace Complete
                 m_CurrentLaunchForce += m_ChargeSpeed * Time.deltaTime;
 
                 m_AimSlider.value = m_CurrentLaunchForce;
+
+                Debug.Log(m_CurrentLaunchForce);
+
+
+
             }
+
             // Otherwise, if the fire button is released and the shell hasn't been launched yet...
             else if (Input.GetButtonUp(m_FireButton) && !m_Fired)
             {
@@ -113,8 +119,9 @@ namespace Complete
             shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward;
 
             // Change the clip to the firing clip and play it.
-            m_ShootingAudio.clip = m_FireClip;
-            m_ShootingAudio.Play();
+            m_ShootingAudio.PlayOneShot(m_FireClip[Random.Range(0, m_FireClip.Length)]);
+            m_ShootingAudio.pitch = Random.Range(0.98f, 1f);
+            m_ShootingAudio.volume = Random.Range(0.92f, 1f);
 
             // Reset the launch force.  This is a precaution in case of missing button events.
             m_CurrentLaunchForce = m_MinLaunchForce;

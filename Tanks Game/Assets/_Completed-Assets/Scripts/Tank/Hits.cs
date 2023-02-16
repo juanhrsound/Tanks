@@ -24,27 +24,26 @@ public class Hits : MonoBehaviour
         if (collision.gameObject.tag == "Tree")
         {
             m_hits.PlayOneShot(m_Trees[Random.Range(0, m_Trees.Length)]);
-            AudioParameters();
+            RandomPitch();
 
         }
         if (collision.gameObject.tag == "Column")
         {
             m_hits.PlayOneShot(m_Columns[Random.Range(0, m_Columns.Length)]);
-            AudioParameters();
 
 
         }
         if (collision.gameObject.tag == "Pumpjack")
         {
             m_hits.PlayOneShot(m_Pumpjack[Random.Range(0, m_Pumpjack.Length)]);
-            AudioParameters();
+            RandomPitch();
 
 
         }
         if (collision.gameObject.tag == "PalmTree")
         {
             m_hits.PlayOneShot(m_PalmTrees[Random.Range(0, m_PalmTrees.Length)]);
-            AudioParameters();
+            RandomPitch();
 
 
         }
@@ -52,28 +51,28 @@ public class Hits : MonoBehaviour
         {
 
             m_hits.PlayOneShot(m_Radar[Random.Range(0, m_Radar.Length)]);
-            AudioParameters();
+            RandomPitch();
 
 
         }
         if (collision.gameObject.tag == "OilStorage")
         {
             m_hits.PlayOneShot(m_OilStorage[Random.Range(0, m_OilStorage.Length)]);
-            AudioParameters();
+            RandomPitch();
 
 
         }
         if (collision.gameObject.tag == "Buildings")
         {
             m_hits.PlayOneShot(m_Buildings[Random.Range(0, m_Buildings.Length)]);
-            AudioParameters();
+            RandomPitch();
 
 
         }
 
     }
 
-    private void AudioParameters()
+    private void RandomPitch()
     {
         m_hits.pitch = Random.Range(0.9f, 1);
        

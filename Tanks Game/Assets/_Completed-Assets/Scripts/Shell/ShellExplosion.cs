@@ -14,11 +14,11 @@ namespace Complete
         public float m_ExplosionForce = 1000f;              // The amount of force added to a tank at the centre of the explosion.
         public float m_MaxLifeTime = 2f;                    // The time in seconds before the shell is removed.
         public float m_ExplosionRadius = 5f;                // The maximum distance away from the explosion tanks can be and are still affected.
-
+        public GameObject gameObject;
 
         //JH---------
         public AudioSource m_ExplosionAudio;                // Reference to the audio that will play on explosion.
-        public AudioClip[] m_ExplosionClip;
+        //public AudioClip[] m_ExplosionClip;
 
 
         
@@ -31,7 +31,7 @@ namespace Complete
 
 
         private void OnTriggerEnter (Collider other)
-        {
+        {        
 
             // Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
             Collider[] colliders = Physics.OverlapSphere(transform.position, m_ExplosionRadius, m_TankMask);
@@ -70,7 +70,11 @@ namespace Complete
             m_ExplosionParticles.Play();
 
             // Play the explosion sound effect.
-            m_ExplosionAudio.Play();
+
+            //m_ExplosionAudio.Play();
+            Invoke("ShellExplosions", -1f);
+
+
 
             // Once the particles have finished, destroy the gameobject they are on.
             ParticleSystem.MainModule mainModule = m_ExplosionParticles.main;
@@ -79,13 +83,20 @@ namespace Complete
             // Destroy the shell.
             Destroy(gameObject);
 
-
+            /*
             //JH---------
-            // Invoke("ExplosionDebris", Random.Range(0, 0.3f));
+            Invoke("ExplosionDebris", Random.Range(0, 0.3f));
 
-            //ExplosionDebris();
+            ExplosionDebris();
+            */
+        }
+
+        
 
 
+        private void ShellExplosions()
+        {
+            m_ExplosionAudio.Play();
 
         }
 
@@ -105,7 +116,7 @@ namespace Complete
 
         }
 
-       
+       /*
 
         private void DebrisOnly_0()
         {
@@ -133,7 +144,7 @@ namespace Complete
         }
         //---------------
 
-        
+        */
 
         private float CalculateDamage (Vector3 targetPosition)
         {

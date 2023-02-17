@@ -20,7 +20,7 @@ namespace Complete
         //public AudioSource m_ExplosionAudio;                // Reference to the audio that will play on explosion.
         //public AudioClip m_Woosh;
         //public AudioClip[] m_ExplosionClip;
-        public DebrisSound debrisSound;
+        public Collisions debrisSound;
 
 
 
@@ -107,8 +107,12 @@ namespace Complete
 
             //m_ExplosionAudio.Play();
 
-            //m_ExplosionAudio.Play();
-            Explode();
+            //m_ExplosionAudio.Play();           
+
+            //debrisSound.audioSource.Play();
+
+            PlayRandomDebrisClip();
+            //Explode();
 
             // Once the particles have finished, destroy the gameobject they are on.
             ParticleSystem.MainModule mainModule = m_ExplosionParticles.main;
@@ -118,34 +122,20 @@ namespace Complete
             Destroy(gameObject);
 
 
-            /*
-            //JH---------
-            Invoke("ExplosionDebris", Random.Range(0, 0.3f));
-
-            ExplosionDebris();
-            */
         }
 
-        
-        
-        private void Explode()
+        void PlayRandomDebrisClip()
         {
-
-            debrisSound.audioSource.Play();
-
-            /*
-            // Play the debris sound using the values stored in the "Debris Sound" ScriptableObject
-            AudioSource.PlayClipAtPoint(debrisSound.debrisClip[Random.Range(0, debrisSound.debrisClip.Length)],
-                                                                            transform.position,
-                                                                            debrisSound.volume);
-            
+            GameObject audioObject = new GameObject();
+            AudioSource audioSource = audioObject.AddComponent<AudioSource>();
 
 
+            audioSource.volume = Random.Range(debrisSound.volume.x, debrisSound.volume.y);
+            audioSource.pitch = Random.Range(debrisSound.pitch.x, debrisSound.pitch.y);
 
-            // Adjust the pitch of the debris sound
-            AudioSource.PlayClipAtPoint(debrisSound.debrisClip[Random.Range(0, debrisSound.debrisClip.Length)],
-                                                                            transform.position,
-                                                                            debrisSound.volume * debrisSound.pitch);*/
+            audioSource.PlayOneShot(debrisSound.debrisClip[Random.Range(0, debrisSound.debrisClip.Length)]);
+
+            Destroy(audioObject, debrisSound.debrisClip.Length);
         }
 
 

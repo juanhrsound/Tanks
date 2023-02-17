@@ -142,7 +142,7 @@ namespace Complete
                 audioMixer.SetFloat("shiftShoots", Random.Range(0.62f, 0.70f));
                 audioMixer.SetFloat("lowPassShooting", 10f);
                 //Reverb Parameters
-                audioMixer.SetFloat("roomShootingReverb", Random.Range(-800,-810));
+                audioMixer.SetFloat("roomShootingReverb", Random.Range(-800,-850));
                 audioMixer.SetFloat("reflectDelay", Random.Range(0.28f, 0.3f));
 
             }

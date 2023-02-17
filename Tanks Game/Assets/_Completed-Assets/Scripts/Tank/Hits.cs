@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 
 public class Hits : MonoBehaviour
-{
+{/*
     public GameObject gameObject;
     public GameObject shell;
 
@@ -83,6 +83,6 @@ public class Hits : MonoBehaviour
         m_hits.pitch = Random.Range(0.9f, 1);
        
     }
-
+    */
 
 }

@@ -7,15 +7,18 @@ using UnityEngine.Audio;
 //[CreateAssetMenu (fileName = "DebrisSound", menuName = "Audio/DebrisSound")]
 public class DebrisSound : ScriptableObject
 {
-    /*
-    public AudioClip debrisClip;
+    
+    public AudioClip [] debrisClip;
 
-    public float volume = 1f;
-    public float pitch = 1f;
-    public float delay = 1f;
+    public float volume = Random.Range(0f, 1f);
+    public float pitch = Random.Range(0.8f, 1.2f);
+    public float delay;
+    public AudioMixerGroup mixerGroup;
+    public AudioSource audioSource;
 
     
-    */
+
+
 
     /*
 
@@ -84,6 +87,6 @@ public class DebrisSound : ScriptableObject
         //---------------
 
         */
-    
+
 
 }

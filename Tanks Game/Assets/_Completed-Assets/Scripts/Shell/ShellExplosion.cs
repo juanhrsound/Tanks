@@ -17,7 +17,7 @@ namespace Complete
 
 
         //JH---------
-        public AudioSource m_ExplosionAudio;                // Reference to the audio that will play on explosion.
+        //public AudioSource m_ExplosionAudio;                // Reference to the audio that will play on explosion.
         //public AudioClip m_Woosh;
         //public AudioClip[] m_ExplosionClip;
         public DebrisSound debrisSound;
@@ -107,9 +107,9 @@ namespace Complete
 
             //m_ExplosionAudio.Play();
 
-            m_ExplosionAudio.Play();
+            //m_ExplosionAudio.Play();
+            Explode();
 
-            
             // Once the particles have finished, destroy the gameobject they are on.
             ParticleSystem.MainModule mainModule = m_ExplosionParticles.main;
             Destroy(m_ExplosionParticles.gameObject, mainModule.duration);
@@ -127,14 +127,29 @@ namespace Complete
         }
 
         
-        /*
+        
         private void Explode()
         {
+
+            debrisSound.audioSource.Play();
+
+            /*
             // Play the debris sound using the values stored in the "Debris Sound" ScriptableObject
-            AudioSource.PlayClipAtPoint(debrisSound.debrisClip, transform.position, debrisSound.volume);
+            AudioSource.PlayClipAtPoint(debrisSound.debrisClip[Random.Range(0, debrisSound.debrisClip.Length)],
+                                                                            transform.position,
+                                                                            debrisSound.volume);
+            
+
+
+
             // Adjust the pitch of the debris sound
-            AudioSource.PlayClipAtPoint(debrisSound.debrisClip, transform.position, debrisSound.volume * debrisSound.pitch);
-        }*/
+            AudioSource.PlayClipAtPoint(debrisSound.debrisClip[Random.Range(0, debrisSound.debrisClip.Length)],
+                                                                            transform.position,
+                                                                            debrisSound.volume * debrisSound.pitch);*/
+        }
+
+
+
 
 
         private float CalculateDamage (Vector3 targetPosition)

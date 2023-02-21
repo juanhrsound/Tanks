@@ -31,7 +31,7 @@ public class CollisionProps : MonoBehaviour
         audioSource.PlayOneShot(debrisSound.debrisClip[Random.Range(0, debrisSound.debrisClip.Length)]);
         audioSource.volume = Random.Range(debrisSound.volume.x, debrisSound.volume.y);
         audioSource.pitch = Random.Range(debrisSound.pitch.x, debrisSound.pitch.y);
-
+        Destroy(audioObject, debrisSound.debrisClip.Length);
 
     }
 

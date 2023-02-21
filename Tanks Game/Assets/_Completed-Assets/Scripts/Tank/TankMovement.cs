@@ -13,7 +13,8 @@ namespace Complete
         public AudioSource m_MovementAudio;         // Reference to the audio source used to play engine sounds. NB: different to the shooting audio source.
         
         public AudioClip m_EngineIdling;            // Audio to play when the tank isn't moving.
-        public AudioClip m_EngineDriving;           // Audio to play when the tank is moving.
+        public AudioClip m_EngineDriving;
+        //JH
         public float m_PitchRange = 0.2f;           // The amount by which the pitch of the engine noises can vary.
 
 
@@ -25,30 +26,20 @@ namespace Complete
         private float m_OriginalPitch;
         private ParticleSystem[] m_particleSystems; // References to all the particles systems used by the Tanks
 
-        //private string PitchParamOfGround = "PitchParamOfGround";
-
 
         //JH////
 
         public AudioMixer audioMainMixer;
-        private string pitchParamOfGround = "pitchParamOfGround";
-        private string PitchParam = "PitchParam";
-
+        private string pitchGround = "pitchGround";
+        private string pitchDriving = "pitchDriving";
         private string groundVol = "groundVol";
-        private string movVol = "movVol";
-
-        public AudioSource m_GroundMaterial;
-        public AudioClip m_Ground;
-        public AudioClip m_Concrete;
-        public AudioClip m_ConcreteDriving;
-
-        
-
-        //public AudioSource m_TurningGround;
-        //public AudioClip[] m_groundTurning;
-
+        private string drivingVol = "drivingVol";
         private bool isOnConcrete;
 
+        public AudioSource m_GroundMaterial;
+        public AudioClip m_Dirt;
+        public AudioClip m_Concrete;
+        
         
         private void Awake()
         {
@@ -110,7 +101,6 @@ namespace Complete
             GroundSound();
 
 
-
         }
 
         
@@ -120,18 +110,14 @@ namespace Complete
             if (Mathf.Abs(m_MovementInputValue) < 0.1f && Mathf.Abs(m_TurnInputValue) < 0.1f)
             {
 
-
-
                 // ... and if the audio source is currently playing the driving clip...
                 if (m_MovementAudio.clip == m_EngineDriving)
                 {
                     // ... change the clip to idling and play it.
                     m_MovementAudio.clip = m_EngineIdling;
-                    audioMainMixer.SetFloat(movVol, -7f);
-
-                    //m_MovementAudio.pitch = Random.Range(m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
-                    Invoke("PlayEngine", 0f);
-                    audioMainMixer.SetFloat(movVol, -7f);
+                    audioMainMixer.SetFloat(drivingVol, -7f);
+                    m_MovementAudio.time = Random.Range(0, m_MovementAudio.clip.length);
+                    m_MovementAudio.Play();
                     
                 }
             }
@@ -141,33 +127,118 @@ namespace Complete
                 if (m_MovementAudio.clip == m_EngineIdling)
                 {
                     // ... change the clip to driving and play.
+
                     m_MovementAudio.clip = m_EngineDriving;
-                    audioMainMixer.SetFloat(movVol, -5f);
-                    //m_MovementAudio.pitch = Random.Range(m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
+                    audioMainMixer.SetFloat(drivingVol, -5f);
                     m_MovementAudio.time = Random.Range(0, m_MovementAudio.clip.length);
-                    Invoke("PlayEngine", 0f);
+                    m_MovementAudio.Play();
 
 
                 }
             }
         }
 
-
-        //JH
-        private void PlayEngine()
-        {
-            m_MovementAudio.Play();
-        }
-
-
         private void FixedUpdate()
         {
-            // Adjust the rigidbodies position and orientation in FixedUpdate.
             Move();
             Turn();
-            //Debug.Log(m_MovementInputValue);
         }
 
+               
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.tag == "Concrete")
+            {
+                m_GroundMaterial.Stop();
+                m_GroundMaterial.clip = m_Concrete;
+                m_GroundMaterial.Play();
+
+                isOnConcrete = true;
+
+            }
+        }
+
+        private void OnCollisionExit(Collision collision)
+        {
+            m_GroundMaterial.clip = m_Dirt;
+            isOnConcrete = false;
+
+        }
+                
+       
+        private void GroundSound()
+        {
+            if (!m_GroundMaterial.isPlaying)
+            {
+                if (Mathf.Abs(m_MovementInputValue) > 0.1f)
+                {
+                    m_MovementAudio.Play();
+                    m_GroundMaterial.Play();
+                    m_GroundMaterial.time = Random.Range(0, m_GroundMaterial.clip.length);
+                    audioMainMixer.SetFloat(pitchGround, Random.Range(1.1f, 1.2f));
+                    audioMainMixer.SetFloat(groundVol, Random.Range(-2.5f, -2f));                                
+                  
+                }
+                
+                if (Mathf.Abs(m_TurnInputValue) > 0.1f)
+                {
+                    m_GroundMaterial.Play();
+                    m_GroundMaterial.time = Random.Range(0, m_GroundMaterial.clip.length);
+                    audioMainMixer.SetFloat(pitchDriving, Random.Range(1.05f, 1.15f));
+                    audioMainMixer.SetFloat(groundVol, Random.Range(-1f, 0f));
+                    audioMainMixer.SetFloat(pitchDriving, Random.Range(1.1f, 1.2f));
+                                        
+
+                    if (isOnConcrete)
+                    {
+                        audioMainMixer.SetFloat(pitchGround, 1.2f);
+                    }
+
+                }
+               
+            }
+
+            if (m_GroundMaterial.isPlaying)
+            {
+                if (Mathf.Abs(m_MovementInputValue) == 0f && Mathf.Abs(m_TurnInputValue) == 0f)
+
+                {
+                    audioMainMixer.SetFloat(pitchDriving, 1f);
+                    m_GroundMaterial.Stop();
+                }                
+
+                if(Mathf.Abs(m_TurnInputValue) < 0.1f)
+                {                    
+                    audioMainMixer.SetFloat(pitchGround, 1f);
+                    audioMainMixer.SetFloat(pitchDriving, 1f);
+                    audioMainMixer.SetFloat(groundVol, -4f);
+
+                }
+
+                if (Mathf.Abs(m_TurnInputValue) > 0.1f)
+                {
+                    m_GroundMaterial.time = Random.Range(0, m_GroundMaterial.clip.length);
+                    audioMainMixer.SetFloat(pitchDriving, Random.Range(1.05f, 1.15f));
+                    audioMainMixer.SetFloat(groundVol, Random.Range(-1f, 0f));
+
+
+                    if (!isOnConcrete)
+                    {
+                      audioMainMixer.SetFloat(pitchGround, Random.Range(1.1f, 1.2f));
+
+                    }
+
+                    if (isOnConcrete)
+                    {
+                        audioMainMixer.SetFloat(pitchGround, 1.2f);
+                    }
+
+
+                }
+
+            }                       
+
+        }     
 
         private void Move()
         {
@@ -190,108 +261,8 @@ namespace Complete
             // Apply this rotation to the rigidbody's rotation.
             m_Rigidbody.MoveRotation(m_Rigidbody.rotation * turnRotation);
         }
-        
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (collision.gameObject.tag == "Concrete")
-            {
-                m_MovementAudio.clip = m_ConcreteDriving;
-                m_GroundMaterial.clip = m_Concrete;
-
-                isOnConcrete = true;
-             
-                                
-            }
-        }
-
-        private void OnCollisionExit(Collision collision)
-        {
-            m_MovementAudio.clip = m_EngineDriving;
-            m_GroundMaterial.clip = m_Ground;
-            isOnConcrete = false;
-
-        }
-        
-        
-       
-        private void GroundSound()
-        {
-            if (!m_GroundMaterial.isPlaying)
-            {
-                if (Mathf.Abs(m_MovementInputValue) > 0.1f)
-
-                {
-                    m_GroundMaterial.pitch = Random.Range(0.9f, 1);
-                    m_GroundMaterial.time = Random.Range(0, m_GroundMaterial.clip.length);
-                    m_GroundMaterial.Play();
-                    m_MovementAudio.Play();
-
-                }
-                 else if (Mathf.Abs(m_TurnInputValue) > 0.1f)
-                {
-                    m_GroundMaterial.Play();
-                    audioMainMixer.SetFloat(pitchParamOfGround, 1.2f);
-                    audioMainMixer.SetFloat(groundVol, -4f);
-
-                    //Debug.Log(m_TurnInputValue);
-                }
-
-
-            }
-
-            if (m_GroundMaterial.isPlaying)
-            {
-                if (Mathf.Abs(m_MovementInputValue) == 0f && Mathf.Abs(m_TurnInputValue) == 0f)
-
-                {
-                    m_GroundMaterial.Stop();
-
-                }
-                
-                else if (Mathf.Abs(m_TurnInputValue) > 0.1f)
-                {
-                    audioMainMixer.SetFloat(pitchParamOfGround, 1.2f);
-                    audioMainMixer.SetFloat(groundVol, -4f);
-
-                }
-
-                else if(Mathf.Abs(m_TurnInputValue) < 0.1f)
-                {
-                    audioMainMixer.SetFloat(pitchParamOfGround, 1f);
-                    audioMainMixer.SetFloat(groundVol, -7f);
-
-                }
-
-
-            }
-                       
-            
-            if (isOnConcrete == true)
-            {
-                if (Mathf.Abs(m_TurnInputValue) > 0.1f)
-                {
-                    audioMainMixer.SetFloat(pitchParamOfGround, 1.3f);
-                    audioMainMixer.SetFloat(groundVol, -4f);
-
-                }
-
-                if (Mathf.Abs(m_MovementInputValue) < 0.1f)
-                {
-                    m_MovementAudio.Stop();
-
-                }
-
-            }
-            
-        }
-
-        
-
 
     }
-
-    
-
 
     
 }

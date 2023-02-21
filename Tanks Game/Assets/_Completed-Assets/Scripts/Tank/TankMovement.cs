@@ -115,7 +115,7 @@ namespace Complete
                 {
                     // ... change the clip to idling and play it.
                     m_MovementAudio.clip = m_EngineIdling;
-                    audioMainMixer.SetFloat(drivingVol, -7f);
+                    audioMainMixer.SetFloat(drivingVol, -14f);
                     m_MovementAudio.time = Random.Range(0, m_MovementAudio.clip.length);
                     m_MovementAudio.Play();
                     
@@ -129,7 +129,7 @@ namespace Complete
                     // ... change the clip to driving and play.
 
                     m_MovementAudio.clip = m_EngineDriving;
-                    audioMainMixer.SetFloat(drivingVol, -5f);
+                    audioMainMixer.SetFloat(drivingVol, -10f);
                     m_MovementAudio.time = Random.Range(0, m_MovementAudio.clip.length);
                     m_MovementAudio.Play();
 
@@ -185,7 +185,7 @@ namespace Complete
                     m_GroundMaterial.Play();
                     m_GroundMaterial.time = Random.Range(0, m_GroundMaterial.clip.length);
                     audioMainMixer.SetFloat(pitchDriving, Random.Range(1.05f, 1.15f));
-                    audioMainMixer.SetFloat(groundVol, Random.Range(-1f, 0f));
+                    audioMainMixer.SetFloat(groundVol, Random.Range(-4f, -2f));
                     audioMainMixer.SetFloat(pitchDriving, Random.Range(1.1f, 1.2f));
                                         
 
@@ -200,7 +200,8 @@ namespace Complete
 
             if (m_GroundMaterial.isPlaying)
             {
-                if (Mathf.Abs(m_MovementInputValue) == 0f && Mathf.Abs(m_TurnInputValue) == 0f)
+                if (Mathf.Abs(m_MovementInputValue) == 0f
+                    && Mathf.Abs(m_TurnInputValue) == 0f)
 
                 {
                     audioMainMixer.SetFloat(pitchDriving, 1f);
@@ -211,7 +212,7 @@ namespace Complete
                 {                    
                     audioMainMixer.SetFloat(pitchGround, 1f);
                     audioMainMixer.SetFloat(pitchDriving, 1f);
-                    audioMainMixer.SetFloat(groundVol, -4f);
+                    audioMainMixer.SetFloat(groundVol, -10f);
 
                 }
 
@@ -219,7 +220,7 @@ namespace Complete
                 {
                     m_GroundMaterial.time = Random.Range(0, m_GroundMaterial.clip.length);
                     audioMainMixer.SetFloat(pitchDriving, Random.Range(1.05f, 1.15f));
-                    audioMainMixer.SetFloat(groundVol, Random.Range(-1f, 0f));
+                    audioMainMixer.SetFloat(groundVol, Random.Range(-4f, -2f));
 
 
                     if (!isOnConcrete)

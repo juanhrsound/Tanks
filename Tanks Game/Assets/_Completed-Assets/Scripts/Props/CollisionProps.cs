@@ -5,7 +5,6 @@ using UnityEngine;
 public class CollisionProps : MonoBehaviour
 {
     public Collisions debrisSound;
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Player")
@@ -24,6 +23,7 @@ public class CollisionProps : MonoBehaviour
 
         }
     }
+
     private void AudioComponent()
     {
         GameObject audioObject = new GameObject();
@@ -31,6 +31,11 @@ public class CollisionProps : MonoBehaviour
         audioSource.PlayOneShot(debrisSound.debrisClip[Random.Range(0, debrisSound.debrisClip.Length)]);
         audioSource.volume = Random.Range(debrisSound.volume.x, debrisSound.volume.y);
         audioSource.pitch = Random.Range(debrisSound.pitch.x, debrisSound.pitch.y);
+
+        AudioLowPassFilter lowPassFilter = audioObject.AddComponent<AudioLowPassFilter>();
+        lowPassFilter.cutoffFrequency = 4000;
+        lowPassFilter.lowpassResonanceQ = 0.5f;
+
         Destroy(audioObject, debrisSound.debrisClip.Length);
 
     }

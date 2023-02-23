@@ -191,7 +191,7 @@ namespace Complete
 
                     if (isOnConcrete)
                     {
-                        audioMainMixer.SetFloat(pitchGround, 1.2f);
+                        audioMainMixer.SetFloat(pitchGround, 1.1f);
                     }
 
                 }
@@ -231,7 +231,7 @@ namespace Complete
 
                     if (isOnConcrete)
                     {
-                        audioMainMixer.SetFloat(pitchGround, 1.2f);
+                        audioMainMixer.SetFloat(pitchGround, 1.1f);
                     }
 
 

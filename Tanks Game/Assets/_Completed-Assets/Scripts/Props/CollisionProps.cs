@@ -33,12 +33,10 @@ public class CollisionProps : MonoBehaviour
         audioSource.pitch = Random.Range(debrisSound.pitch.x, debrisSound.pitch.y);
 
         AudioLowPassFilter lowPassFilter = audioObject.AddComponent<AudioLowPassFilter>();
-        lowPassFilter.cutoffFrequency = 4000;
+        lowPassFilter.cutoffFrequency = 7700;
         lowPassFilter.lowpassResonanceQ = 0.5f;
 
         Destroy(audioObject, debrisSound.debrisClip.Length);
 
     }
-
-
 }

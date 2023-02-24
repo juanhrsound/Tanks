@@ -176,7 +176,8 @@ namespace Complete
                     m_GroundMaterial.Play();
                     m_GroundMaterial.time = Random.Range(0, m_GroundMaterial.clip.length);
                     audioMainMixer.SetFloat(pitchGround, Random.Range(1.1f, 1.2f));
-                    audioMainMixer.SetFloat(groundVol, Random.Range(-2.5f, -2f));                                
+                    //check this on demo reel
+                    //audioMainMixer.SetFloat(groundVol, Random.Range(-2.5f, -2f));                                
                   
                 }
                 
@@ -185,7 +186,7 @@ namespace Complete
                     m_GroundMaterial.Play();
                     m_GroundMaterial.time = Random.Range(0, m_GroundMaterial.clip.length);
                     audioMainMixer.SetFloat(pitchDriving, Random.Range(1.05f, 1.15f));
-                    audioMainMixer.SetFloat(groundVol, Random.Range(-4f, -2f));
+                    audioMainMixer.SetFloat(groundVol, Random.Range(-9f, -67f));
                     audioMainMixer.SetFloat(pitchDriving, Random.Range(1.1f, 1.2f));
                                         
 
@@ -212,26 +213,26 @@ namespace Complete
                 {                    
                     audioMainMixer.SetFloat(pitchGround, 1f);
                     audioMainMixer.SetFloat(pitchDriving, 1f);
+                    //JH // MAKE THE SOUND LOWER ON THE DEMO REEL SO IT SOUNDS IN A GAME    
                     audioMainMixer.SetFloat(groundVol, -10f);
 
                 }
 
                 if (Mathf.Abs(m_TurnInputValue) > 0.1f)
                 {
-                    m_GroundMaterial.time = Random.Range(0, m_GroundMaterial.clip.length);
                     audioMainMixer.SetFloat(pitchDriving, Random.Range(1.05f, 1.15f));
-                    audioMainMixer.SetFloat(groundVol, Random.Range(-4f, -2f));
+                    audioMainMixer.SetFloat(groundVol, Random.Range(-9f, -7f));
 
 
                     if (!isOnConcrete)
                     {
-                      audioMainMixer.SetFloat(pitchGround, Random.Range(1.1f, 1.2f));
+                      audioMainMixer.SetFloat(pitchGround, Random.Range(1.2f, 1.3f));
 
                     }
 
                     if (isOnConcrete)
                     {
-                        audioMainMixer.SetFloat(pitchGround, 1.1f);
+                        audioMainMixer.SetFloat(pitchGround, Random.Range(1.04f, 1.05f));
                     }
 
 

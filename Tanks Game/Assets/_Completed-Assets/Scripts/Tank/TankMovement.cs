@@ -115,7 +115,7 @@ namespace Complete
                 {
                     // ... change the clip to idling and play it.
                     m_MovementAudio.clip = m_EngineIdling;
-                    audioMainMixer.SetFloat(drivingVol, -14f);
+                    audioMainMixer.SetFloat(drivingVol, -12f);
                     m_MovementAudio.time = Random.Range(0, m_MovementAudio.clip.length);
                     m_MovementAudio.Play();
                     
@@ -129,7 +129,7 @@ namespace Complete
                     // ... change the clip to driving and play.
 
                     m_MovementAudio.clip = m_EngineDriving;
-                    audioMainMixer.SetFloat(drivingVol, -10f);
+                    audioMainMixer.SetFloat(drivingVol, -8f);
                     m_MovementAudio.time = Random.Range(0, m_MovementAudio.clip.length);
                     m_MovementAudio.Play();
 

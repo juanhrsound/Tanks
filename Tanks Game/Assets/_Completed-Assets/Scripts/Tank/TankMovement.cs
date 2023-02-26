@@ -186,7 +186,7 @@ namespace Complete
                     m_GroundMaterial.Play();
                     m_GroundMaterial.time = Random.Range(0, m_GroundMaterial.clip.length);
                     audioMainMixer.SetFloat(pitchDriving, Random.Range(1.05f, 1.15f));
-                    audioMainMixer.SetFloat(groundVol, Random.Range(-9f, -67f));
+                    audioMainMixer.SetFloat(groundVol, Random.Range(-9f, -7f));
                     audioMainMixer.SetFloat(pitchDriving, Random.Range(1.1f, 1.2f));
                                         
 
